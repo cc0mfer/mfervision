@@ -197,10 +197,29 @@ export default {
     };
 
     const handleKeyDown = (event) => {
-      if (event.key === 'Delete' || event.key === 'Backspace') {
-        const activeOverlayIndex = overlays.value.findIndex((overlay) => overlay.active);
-        if (activeOverlayIndex !== -1) {
-          deleteOverlay(activeOverlayIndex);
+      const activeOverlayIndex = overlays.value.findIndex((overlay) => overlay.active);
+      if (activeOverlayIndex !== -1) {
+        switch (event.key) {
+          case 'Delete':
+          case 'Backspace':
+            deleteOverlay(activeOverlayIndex);
+            break;
+          case 'ArrowUp':
+            event.preventDefault();
+            overlays.value[activeOverlayIndex].y -= 1;
+            break;
+          case 'ArrowDown':
+            event.preventDefault();
+            overlays.value[activeOverlayIndex].y += 1;
+            break;
+          case 'ArrowLeft':
+            event.preventDefault();
+            overlays.value[activeOverlayIndex].x -= 1;
+            break;
+          case 'ArrowRight':
+            event.preventDefault();
+            overlays.value[activeOverlayIndex].x += 1;
+            break;
         }
       }
     };
@@ -254,6 +273,7 @@ export default {
   },
 };
 </script>
+
 
 <style>
 @font-face {
