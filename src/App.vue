@@ -238,6 +238,7 @@ body {
   font-family: 'SartoshiScript';
   margin: 0;
   padding: 0;
+  touch-action: manipulation; /* Prevent double-tap to zoom */
 }
 
 h1 {
