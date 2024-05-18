@@ -111,15 +111,8 @@ export default {
     };
 
     const addOverlay = () => {
-      const container = document.querySelector('.image-container');
-      const containerRect = container.getBoundingClientRect();
-      const overlayWidth = containerRect.width * 0.1; // 10% of container width
-      const overlayHeight = overlayWidth; // Keep aspect ratio
-      const initialX = containerRect.width * 0.5 - overlayWidth / 2; // Center horizontally
-      const initialY = containerRect.height * 0.2 - overlayHeight / 2; // Near top
-
-      overlays.value.push({ x: initialX, y: initialY, width: overlayWidth, height: overlayHeight, active: false });
-      overlays.value.push({ x: initialX + overlayWidth + 10, y: initialY, width: overlayWidth, height: overlayHeight, active: false });
+      overlays.value.push({ x: 190, y: -220, width: 50, height: 50, active: false });
+      overlays.value.push({ x: 250, y: -220, width: 50, height: 50, active: false });
     };
 
     const deleteAllOverlays = () => {
