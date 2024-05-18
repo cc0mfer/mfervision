@@ -8,12 +8,12 @@
       <div id="main-container">
         <input v-if="!imageUrl" type="file" ref="fileInput" @change="onFileChange" accept="image/*" />
         <div v-if="imageUrl" class="buttons">
-          <button v-if="imageUrl" @click="addOverlay">add mfer eyes</button>
-          <button v-if="overlays.length > 0" @click="deleteAllOverlays">delete all</button>
-          <button v-if="imageUrl" @click="capturePreview">download image</button>
-          <button v-if="imageUrl" @click="clearImage">clear image</button>
-          <button v-if="overlays.length > 0" @click="increaseOverlaySize">+</button>
+          <button v-if="overlays.length > 0" @click="deleteAllOverlays">clear image</button>
+          <button v-if="imageUrl" @click="clearImage">start over</button>
+          <button v-if="imageUrl && overlays.length > 0" @click="capturePreview">download</button>
+          <button v-if="imageUrl" @click="addOverlay">add $mfer eyes</button>
           <button v-if="overlays.length > 0" @click="decreaseOverlaySize">-</button>
+          <button v-if="overlays.length > 0" @click="increaseOverlaySize">+</button>
         </div>
         <div v-if="imageUrl" class="image-container" ref="previewContainer">
           <cropper
@@ -55,17 +55,16 @@
 
         <p class="instruction-title"><strong>3. Position and Resize</strong></p>
         <p class="shift">- Drag and resize to fit your eyes</p>
-
-        <p class="instruction-title"><strong>4. Edit and Customize</strong></p>
         <p class="shift">- Use "+" and "-" to adjust the size of the overlays</p>
 
-        <p class="instruction-title"><strong>5. Download</strong></p>
-        <p class="shift">- Click "download image" to save your masterpiece as <code>mfer-eyes.png</code></p>
+        <p class="instruction-title"><strong>4. Download</strong></p>
+        <p class="shift">- Click "download" to save your masterpiece to this device.</p>
 
-        <h3>Tips:</h3>
-        <p class="shift">To delete an overlay, select it and press "Delete" or "Backspace"</p>
       </div>
       <footer class="footer">
+        <p>
+          like it? send tips to cc0mfer.eth
+        </p>
         <p>
           This project is licensed under the <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 License</a>.
           <br>
@@ -75,8 +74,6 @@
     </div>
   </div>
 </template>
-
-
 
 <script>
 import { ref, computed, nextTick } from 'vue';
@@ -407,7 +404,7 @@ button {
 
 .footer {
   margin-top: 20px;
-  font-size: 1em;
+  font-size: 1.3em;
   text-align: center;
   color: #666;
 }
@@ -420,5 +417,4 @@ button {
 .footer a:hover {
   text-decoration: underline;
 }
-
 </style>
