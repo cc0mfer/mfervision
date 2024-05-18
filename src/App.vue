@@ -2,39 +2,41 @@
   <div id="app">
     <div class="container">
       <h1>MferVision</h1>
-      <input type="file" @change="onFileChange" accept="image/*" />
-      <div class="buttons">
-        <button v-if="imageUrl" @click="addOverlay">add mfer eyes</button>
-        <button v-if="overlays.length > 0" @click="deleteAllOverlays">delete all</button>
-        <button v-if="imageUrl" @click="capturePreview">download image</button>
-        <button v-if="imageUrl" @click="clearImage">clear image</button>
-      </div>
-      <div v-if="imageUrl" class="image-container" ref="previewContainer">
-        <cropper
-          class="cropper"
-          :src="imageUrl"
-          :stencil-props="stencilProps"
-          @change="onCropChange"
-          @ready="onImageReady"
-          ref="cropper"
-        />
-        <div v-for="(overlay, index) in overlays" :key="index" class="overlay-container">
-          <vue3-draggable-resizable
-            :x="overlay.x"
-            :y="overlay.y"
-            :w="overlay.width"
-            :h="overlay.height"
-            :aspect-ratio="true"
-            @dragging="onDrag(index, $event)"
-            @resizing="onResize(index, $event)"
-            @resize-stop="onResizeStop(index, $event)"
-            @drag-stop="onDragStop(index, $event)"
-            :active="overlay.active"
-            @activated="activateOverlay(index)"
-            @deactivated="deactivateOverlay(index)"
-          >
-            <img :src="overlayUrl" alt="Overlay" class="overlay-image" />
-          </vue3-draggable-resizable>
+      <div id="main">
+        <input type="file" @change="onFileChange" accept="image/*" />
+        <div class="buttons">
+          <button v-if="imageUrl" @click="addOverlay">add mfer eyes</button>
+          <button v-if="overlays.length > 0" @click="deleteAllOverlays">delete all</button>
+          <button v-if="imageUrl" @click="capturePreview">download image</button>
+          <button v-if="imageUrl" @click="clearImage">clear image</button>
+        </div>
+        <div v-if="imageUrl" class="image-container" ref="previewContainer">
+          <cropper
+            class="cropper"
+            :src="imageUrl"
+            :stencil-props="stencilProps"
+            @change="onCropChange"
+            @ready="onImageReady"
+            ref="cropper"
+          />
+          <div v-for="(overlay, index) in overlays" :key="index" class="overlay-container">
+            <vue3-draggable-resizable
+              :x="overlay.x"
+              :y="overlay.y"
+              :w="overlay.width"
+              :h="overlay.height"
+              :aspect-ratio="true"
+              @dragging="onDrag(index, $event)"
+              @resizing="onResize(index, $event)"
+              @resize-stop="onResizeStop(index, $event)"
+              @drag-stop="onDragStop(index, $event)"
+              :active="overlay.active"
+              @activated="activateOverlay(index)"
+              @deactivated="deactivateOverlay(index)"
+            >
+              <img :src="overlayUrl" alt="Overlay" class="overlay-image" />
+            </vue3-draggable-resizable>
+          </div>
         </div>
       </div>
       <div class="instructions">
@@ -56,7 +58,7 @@
         </p>
         <h3>Tips:</h3>
         <p>
-          To delete an overlay, select it and press "Delete" or "Backspace". Click to reactivate inactive overlays. Resize using the handles while maintaining aspect ratio.
+          To delete an overlay, select it and press "Delete" or "Backspace".
         </p>
       </div>
     </div>
@@ -109,8 +111,15 @@ export default {
     };
 
     const addOverlay = () => {
-      overlays.value.push({ x: 300, y: -300, width: 50, height: 50, active: false });
-      overlays.value.push({ x: 350, y: -300, width: 50, height: 50, active: false });
+      const container = document.querySelector('.image-container');
+      const containerRect = container.getBoundingClientRect();
+      const overlayWidth = containerRect.width * 0.1; // 10% of container width
+      const overlayHeight = overlayWidth; // Keep aspect ratio
+      const initialX = containerRect.width * 0.5 - overlayWidth / 2; // Center horizontally
+      const initialY = containerRect.height * 0.2 - overlayHeight / 2; // Near top
+
+      overlays.value.push({ x: initialX, y: initialY, width: overlayWidth, height: overlayHeight, active: false });
+      overlays.value.push({ x: initialX + overlayWidth + 10, y: initialY, width: overlayWidth, height: overlayHeight, active: false });
     };
 
     const deleteAllOverlays = () => {
@@ -234,27 +243,48 @@ export default {
 
 body {
   font-family: 'SartoshiScript';
+  margin: 0;
+  padding: 0;
 }
 
 h1 {
   font-size: 3em;
+  text-align: center;
 }
 
 h2 {
   font-size: 1.4em;
 }
 
+.container {
+  padding: 10px;
+  max-width: 100%;
+  text-align: center;
+}
+
 .image-container {
   position: relative;
   display: inline-block;
-  width: 600px;
-  height: 600px;
+  width: 100%;
+  max-width: 400px; /* Adjust this value to control the maximum width */
+  height: auto;
   background: white;
+  margin: 0 auto;
 }
+
+.cropper {
+  width: 100%;
+  height: auto;
+  max-height: 80vh; /* Ensure the cropper fits within the viewport height */
+  background: #ddd;
+  object-fit: contain; /* Ensure the image scales down to fit within the container */
+}
+
 .overlay-container {
   position: absolute;
   z-index: 10; /* Ensure overlays are above the pan zoom canvas */
 }
+
 .buttons {
   display: flex;
   justify-content: center; /* Center horizontally */
@@ -263,40 +293,48 @@ h2 {
   font-size: 1.5em;
   margin-bottom: 6%; /* Add some space below the buttons */
   margin-top: 6%; /* Add some space above the buttons */
+  flex-wrap: wrap; /* Allow buttons to wrap if needed */
 }
+
+button {
+  font-size: 1em;
+  flex: 1 1 auto; /* Allow buttons to shrink if needed */
+}
+
 .delete-button {
   background: red;
   color: white;
   border: none;
   cursor: pointer;
 }
-.cropper {
-  height: 600px;
-  width: 100%;
-  background: #ddd;
-}
+
 .vue-advanced-cropper__foreground {
   background: none;
 }
+
 .overlay-image {
   width: 100%;
   height: 100%;
   pointer-events: none;
 }
+
 .instructions {
   margin-top: 20px;
   font-size: 1.5em;
   line-height: 1.3;
   text-align: left;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding: 0 5%;
 }
 
 .instructions h2 {
   text-align: center;
   margin-bottom: 20px;
 }
+
 .instructions p {
   margin-bottom: 20px;
 }
+
+
+
 </style>
