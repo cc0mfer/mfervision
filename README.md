@@ -82,7 +82,7 @@ Contributions are welcome! If you have suggestions for improvements or new featu
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the cc0 license. Meaning, do whatever the f^ck you want with this.
 
 ## Contact
 

@@ -2,9 +2,12 @@
   <div id="app">
     <div class="container">
       <h1>MferVision</h1>
-      <div id="main">
-        <input type="file" @change="onFileChange" accept="image/*" />
-        <div class="buttons">
+      <p class="by-cc0mfer">
+        by <a href="https://x.com/cc0mfer" target="_blank">@cc0mfer</a>
+      </p>
+      <div id="main-container">
+        <input v-if="!imageUrl" type="file" ref="fileInput" @change="onFileChange" accept="image/*" />
+        <div v-if="imageUrl" class="buttons">
           <button v-if="imageUrl" @click="addOverlay">add mfer eyes</button>
           <button v-if="overlays.length > 0" @click="deleteAllOverlays">delete all</button>
           <button v-if="imageUrl" @click="capturePreview">download image</button>
@@ -40,32 +43,39 @@
             </vue3-draggable-resizable>
           </div>
         </div>
+        <img v-else src="@/assets/instructions.png" alt="Instructions" class="instructions-image" />
       </div>
       <div class="instructions">
         <h2>How to:</h2>
-        <p>
-          <strong>1. Upload Your Image:</strong> Click "Choose File" and pick your image.
-        </p>
-        <p>
-          <strong>2. Add Mfer Eyes:</strong> Hit "add mfer eyes" to drop those $mfer logos.
-        </p>
-        <p>
-          <strong>3. Position and Resize:</strong> Drag and resize to fit your eyes.
-        </p>
-        <p>
-          <strong>4. Edit and Customize:</strong> Use "delete all" to clear overlays, "clear image" to start over, or use "+" and "-" to adjust the size of the overlays.
-        </p>
-        <p>
-          <strong>5. Download:</strong> Click "download image" to save your masterpiece as <code>mfer-eyes.png</code>.
-        </p>
+        <p class="instruction-title"><strong>1. Upload Your Image</strong></p>
+        <p class="shift">- Click "Choose File" and pick your image</p>
+
+        <p class="instruction-title"><strong>2. Add Mfer Eyes</strong></p>
+        <p class="shift">- Hit "add mfer eyes" to drop those $mfer logos</p>
+
+        <p class="instruction-title"><strong>3. Position and Resize</strong></p>
+        <p class="shift">- Drag and resize to fit your eyes</p>
+
+        <p class="instruction-title"><strong>4. Edit and Customize</strong></p>
+        <p class="shift">- Use "+" and "-" to adjust the size of the overlays</p>
+
+        <p class="instruction-title"><strong>5. Download</strong></p>
+        <p class="shift">- Click "download image" to save your masterpiece as <code>mfer-eyes.png</code></p>
+
         <h3>Tips:</h3>
-        <p>
-          To delete an overlay, select it and press "Delete" or "Backspace".
-        </p>
+        <p class="shift">To delete an overlay, select it and press "Delete" or "Backspace"</p>
       </div>
+      <footer class="footer">
+        <p>
+          This project is licensed under the <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 License</a>.
+          <br>
+          <a href="https://github.com/cc0mfer/mfervision" target="_blank">Fork this on GitHub</a>
+        </p>
+      </footer>
     </div>
   </div>
 </template>
+
 
 
 <script>
@@ -87,6 +97,7 @@ export default {
     const overlays = ref([]);
     const imageRect = ref(null);
     const croppedCoordinates = ref(null);
+    const fileInput = ref(null); // Reference to the file input
 
     const stencilProps = computed(() => ({
       handlers: {},
@@ -125,6 +136,7 @@ export default {
     const clearImage = () => {
       imageUrl.value = null;
       overlays.value = [];
+      fileInput.value.value = null; // Reset the file input
     };
 
     const onCropChange = ({ coordinates, canvas }) => {
@@ -223,6 +235,7 @@ export default {
       deleteAllOverlays,
       clearImage,
       onCropChange,
+      fileInput,
       capturePreview,
       onDrag,
       onDragStop,
@@ -245,7 +258,6 @@ export default {
 };
 </script>
 
-
 <style>
 @font-face {
   font-family: 'SartoshiScript';
@@ -258,6 +270,10 @@ export default {
   overflow: hidden; /* Prevent scrolling */
 }
 
+#main-container {
+  padding-top: 8%
+}
+
 body {
   font-family: 'SartoshiScript';
   margin: 0;
@@ -268,10 +284,33 @@ body {
 h1 {
   font-size: 3em;
   text-align: center;
+  margin-bottom: 5px; /* Reduce the space below the heading */
+}
+
+.shift {
+  margin-left: 3%;
+}
+
+.by-cc0mfer {
+  font-size: 1em;
+  text-align: center;
+  color: #666;
+  margin-top: 0; /* Reduce the space above the text */
+}
+
+.by-cc0mfer a {
+  color: #379E15;
+  text-decoration: none;
+}
+
+.by-cc0mfer a:hover {
+  text-decoration: underline;
 }
 
 h2 {
-  font-size: 1.4em;
+  font-size: 1.7em;
+  text-decoration: underline;
+  text-underline-position: under;
 }
 
 .container {
@@ -288,6 +327,12 @@ h2 {
   height: auto;
   background: white;
   margin: 0 auto;
+}
+
+.instructions-image {
+  width: 90%;
+  max-width: 300px;
+  margin: 20px auto;
 }
 
 .cropper {
@@ -341,10 +386,14 @@ button {
 
 .instructions {
   margin-top: 20px;
-  font-size: 1.5em;
+  font-size: 1.2em;
   line-height: 1.3;
   text-align: left;
   padding: 0 5%;
+}
+
+.instruction-title {
+  font-size: 1.5em;
 }
 
 .instructions h2 {
@@ -353,8 +402,23 @@ button {
 }
 
 .instructions p {
-  margin-bottom: 20px;
+  margin-bottom: 10px; /* Add some space between paragraphs */
 }
 
+.footer {
+  margin-top: 20px;
+  font-size: 1em;
+  text-align: center;
+  color: #666;
+}
+
+.footer a {
+  color: #379E15;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
 
 </style>
