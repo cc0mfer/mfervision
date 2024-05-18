@@ -303,6 +303,14 @@ h2 {
   z-index: 10; /* Ensure overlays are above the pan zoom canvas */
 }
 
+.overlay-image {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  -webkit-touch-callout: none; /* Prevent touch callout on iOS */
+  user-select: none; /* Prevent selection */
+}
+
 .buttons {
   display: flex;
   justify-content: center; /* Center horizontally */
@@ -331,12 +339,6 @@ button {
   background: none;
 }
 
-.overlay-image {
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
 .instructions {
   margin-top: 20px;
   font-size: 1.5em;
@@ -353,7 +355,6 @@ button {
 .instructions p {
   margin-bottom: 20px;
 }
-
 
 
 </style>
