@@ -5,6 +5,9 @@
       <p class="by-cc0mfer">
         by <a href="https://x.com/cc0mfer" target="_blank">@cc0mfer</a>
       </p>
+      <div>
+
+      </div>
       <div id="main-container">
         <input v-if="!imageUrl" type="file" ref="fileInput" @change="onFileChange" accept="image/*" />
         <div v-if="imageUrl" class="buttons">
@@ -15,6 +18,8 @@
           <button v-if="overlays.length > 0" @click="decreaseOverlaySize">-</button>
           <button v-if="overlays.length > 0" @click="increaseOverlaySize">+</button>
         </div>
+      </div>
+      <div>
         <div v-if="imageUrl" class="image-container" ref="previewContainer">
           <cropper
             class="cropper"
@@ -288,7 +293,7 @@ export default {
 }
 
 #main-container {
-  padding-top: 8%
+  padding-top: 8%;
 }
 
 body {
