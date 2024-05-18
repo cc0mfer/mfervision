@@ -9,6 +9,8 @@
           <button v-if="overlays.length > 0" @click="deleteAllOverlays">delete all</button>
           <button v-if="imageUrl" @click="capturePreview">download image</button>
           <button v-if="imageUrl" @click="clearImage">clear image</button>
+          <button v-if="overlays.length > 0" @click="increaseOverlaySize">+</button>
+          <button v-if="overlays.length > 0" @click="decreaseOverlaySize">-</button>
         </div>
         <div v-if="imageUrl" class="image-container" ref="previewContainer">
           <cropper
@@ -51,7 +53,7 @@
           <strong>3. Position and Resize:</strong> Drag and resize to fit your eyes.
         </p>
         <p>
-          <strong>4. Edit and Customize:</strong> Use "delete all" to clear overlays or "clear image" to start over.
+          <strong>4. Edit and Customize:</strong> Use "delete all" to clear overlays, "clear image" to start over, or use "+" and "-" to adjust the size of the overlays.
         </p>
         <p>
           <strong>5. Download:</strong> Click "download image" to save your masterpiece as <code>mfer-eyes.png</code>.
@@ -64,6 +66,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import { ref, computed, nextTick } from 'vue';
@@ -111,8 +114,8 @@ export default {
     };
 
     const addOverlay = () => {
-      overlays.value.push({ x: 190, y: -220, width: 50, height: 50, active: false });
-      overlays.value.push({ x: 250, y: -220, width: 50, height: 50, active: false });
+      overlays.value.push({ x: 190, y: -220, width: 42.69, height: 42.69, active: false });
+      overlays.value.push({ x: 250, y: -220, width: 42.69, height: 42.69, active: false });
     };
 
     const deleteAllOverlays = () => {
@@ -193,6 +196,20 @@ export default {
       }
     };
 
+    const increaseOverlaySize = () => {
+      overlays.value.forEach((overlay) => {
+        overlay.width += 1;
+        overlay.height += 1;
+      });
+    };
+
+    const decreaseOverlaySize = () => {
+      overlays.value.forEach((overlay) => {
+        overlay.width = Math.max(1, overlay.width - 1); // Prevent width from going below 1
+        overlay.height = Math.max(1, overlay.height - 1); // Prevent height from going below 1
+      });
+    };
+
     return {
       imageUrl,
       overlayUrl,
@@ -215,6 +232,8 @@ export default {
       activateOverlay,
       deactivateOverlay,
       handleKeyDown,
+      increaseOverlaySize,
+      decreaseOverlaySize,
     };
   },
   mounted() {
@@ -226,12 +245,17 @@ export default {
 };
 </script>
 
+
 <style>
 @font-face {
   font-family: 'SartoshiScript';
   src: url('@/assets/fonts/SartoshiScript-Regular.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
+}
+
+#app {
+  overflow: hidden; /* Prevent scrolling */
 }
 
 body {
@@ -259,8 +283,8 @@ h2 {
 .image-container {
   position: relative;
   display: inline-block;
-  width: 100%;
-  max-width: 400px; /* Adjust this value to control the maximum width */
+  width: 90%;
+  max-width: 300px; /* Adjust this value to control the maximum width */
   height: auto;
   background: white;
   margin: 0 auto;
@@ -293,6 +317,7 @@ h2 {
 button {
   font-size: 1em;
   flex: 1 1 auto; /* Allow buttons to shrink if needed */
+  padding: 1%;
 }
 
 .delete-button {
