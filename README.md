@@ -1,12 +1,8 @@
-Sure! Here's a sweet README for your Vue project, "MferVision":
-
----
-
 # MferVision
 
-![MferVision](https://i.ibb.co/R2wDX7g/mfer-eyes-2024-05-18-T074056-958.png)
+![MferVision](https://i.ibb.co/CPdYbf0/mfer-eyes-2024-05-18-T074056-958.png)
 
-MferVision lets you add mfercoin logos to your profile pictures, giving your eyes that unique mfer touch to stay laser focused on $mfer, mfer. Customize your PFPs and join the $mfer vibes with style.
+MferVision lets you add mfercoin logos to your profile pictures as eyes, giving you that unique mfer touch to stay laser focused on $mfer, mfer. Customize your PFPs and join the $mfer vibes with style.
 
 ## Table of Contents
 
